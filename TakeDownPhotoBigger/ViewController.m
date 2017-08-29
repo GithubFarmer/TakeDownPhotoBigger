@@ -37,6 +37,7 @@
         _tableView = [[UITableView alloc]initWithFrame:[UIScreen mainScreen].bounds  style:UITableViewStylePlain];
         _tableView.dataSource = self;
         _tableView.delegate = self;
+        //删除多余的图片，不加这句话，第一行会被遮盖
         _tableView.contentInset = UIEdgeInsetsMake(IMAGEHEIGHT, 0, 0, 0);
     }
     return _tableView;
@@ -78,14 +79,18 @@
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView{
    
+    //tableView在y方向上的偏移度
     CGFloat off_Y = scrollView.contentOffset.y;
+  //tableView 的总高度
     CGFloat KHeight = CGRectGetHeight(self.view.frame);
     
+    //当偏移的高度大于
     if(off_Y < -IMAGEHEIGHT){
 //        CGRect frame = self.photoImageView.frame;
+        //photoImageView 和 effectView 的frame是相对于tableView而言的
         self.photoImageView.frame = CGRectMake(0, off_Y, CGRectGetWidth(self.view.frame), -off_Y);
         self.effectView.frame = self.photoImageView.frame;
-        
+        //改变对应view的透明度
         self.effectView.alpha = 1 + (off_Y + IMAGEHEIGHT) / KHeight;
     }
     
